@@ -1,0 +1,1227 @@
+<?
+  import CH.obj.Application.Code.Rule.accounting.AccountingObserver;
+  import CH.obj.Application.Its.Quattro.QuattroBusinessPartnerAccessHelperCoo;
+  import CH.obj.Application.Its.Quattro.QuattroItemExtension;
+  import CH.obj.Application.Its.Quattro.behaviour.common.date.QuattroItemDateDefaulter;
+  import CH.obj.Application.Its.Quattro.behaviour.common.general.QuattroItemGeneralDefaulter;
+  import CH.obj.Application.Its.Quattro.cache.QsdaccList;
+  import CH.obj.Application.Its.Quattro.cache.QsdcndList;
+  import CH.obj.Application.Its.Quattro.cache.QsdresList;
+  import CH.obj.Application.Its.Quattro.cache.QuattroEntityCache;
+  import CH.obj.Application.Its.Quattro.multiquantity.MultiQuantityList;
+  import CH.obj.Application.Its.Quattro.stock.reservation.ProtectedReservationMode;
+  import CH.obj.Application.Its.Quattro.stock.reservation.generator.ReservationType;
+  import CH.obj.Application.Its.Quattro.util.WrapperQshQsi;
+  import CH.obj.Application.MasterdataCodes.BusinessChannel;
+  import CH.obj.Application.quattro.calculation.apps.IApplicationExecutor.APPS;
+  import CH.obj.Libraries.Datatypes.ChrNarrative;
+  import CH.obj.Libraries.Datatypes.DatDate;
+  import CH.obj.Libraries.Datatypes.DddDonebox;
+  import CH.obj.Libraries.Datatypes.NumNumber;
+  import CH.obj.Libraries.Datatypes.ObjectId;
+  import CH.obj.Libraries.Datatypes.QLTBEHAVIOUR;
+  import CH.obj.Libraries.Datatypes.QLTEVALUATIONSIGN;
+  import CH.obj.Libraries.Datatypes.QSTQSPBEHAVIOUR;
+  import CH.obj.Libraries.Datatypes.TxtRichText;
+  import CH.obj.Libraries.Datatypes.ValMoney;
+  import CH.obj.Libraries.Datatypes.ValQuantity;
+  import CH.obj.entityview.address.IAdrBuoExt;
+  import CH.obj.entityview.code.IBcaBuoExt;
+  import CH.obj.entityview.code.ICrgtypBuoExt;
+  import CH.obj.entityview.code.ICstuniBuoExt;
+  import CH.obj.entityview.code.ICurBuoExt;
+  import CH.obj.entityview.code.IDlyBuoExt;
+  import CH.obj.entityview.code.IDspBuoExt;
+  import CH.obj.entityview.code.IPayBuoExt;
+  import CH.obj.entityview.code.IPaytypBuoExt;
+  import CH.obj.entityview.code.IRouBuoExt;
+  import CH.obj.entityview.code.ITaxBuoExt;
+  import CH.obj.entityview.code.IVatBuoExt;
+  import CH.obj.entityview.its.IQdfBuoExt;
+  import CH.obj.entityview.its.IQltBuoExt;
+  import CH.obj.entityview.its.IQltgrpBuoExt;
+  import CH.obj.entityview.its.IQsbBuoExt;
+  import CH.obj.entityview.its.IQsbgrpBuoExt;
+  import CH.obj.entityview.its.IQsbtimBuoExt;
+  import CH.obj.entityview.its.IQsdallBuoExt;
+  import CH.obj.entityview.its.IQsdfstBuoExt;
+  import CH.obj.entityview.its.IQshBuoExt;
+  import CH.obj.entityview.its.IQsiBuoExt;
+  import CH.obj.entityview.its.IQsiExtensionFields;
+  import CH.obj.entityview.its.IQsiclcBuoExt;
+  import CH.obj.entityview.its.IQspBuoExt;
+  import CH.obj.entityview.its.IQspstsBuoExt;
+  import CH.obj.entityview.its.IQstqspBuoExt;
+  import CH.obj.entityview.its.IQstqsptypBuoExt;
+  import CH.obj.entityview.its.IQsxBuoExt;
+  import CH.obj.entityview.its.ITouBuoExt;
+  import CH.obj.entityview.material.IBdlBuoExt;
+  import CH.obj.entityview.material.ILotBuoExt;
+  import CH.obj.entityview.material.IPcaBuoExt;
+  import CH.obj.entityview.material.IPgrBuoExt;
+  import CH.obj.entityview.material.IPgruomBuoExt;
+  import CH.obj.entityview.material.IPltBuoExt;
+  import CH.obj.entityview.material.IPrdBuoExt;
+  import CH.obj.entityview.material.IPrdppcBuoExt;
+  import CH.obj.entityview.material.IPrdpurBuoExt;
+  import CH.obj.entityview.material.IPrdsalBuoExt;
+  import CH.obj.entityview.material.IPrdstsBuoExt;
+  import CH.obj.entityview.material.IPrdsupBuoExt;
+  import CH.obj.entityview.material.IPrduomBuoExt;
+  import CH.obj.entityview.material.IPrdvarBuoExt;
+  import CH.obj.entityview.material.IQrmBuoExt;
+  import CH.obj.entityview.material.IRngBuoExt;
+  import CH.obj.entityview.material.IRspdstBuoExt;
+  import CH.obj.entityview.material.IStyBuoExt;
+  import CH.obj.entityview.material.IUniBuoExt;
+  import CH.obj.entityview.material.IUomBuoExt;
+  import CH.obj.entityview.material.IWhsBuoExt;
+  import CH.obj.entityview.material.IWhslocBuoExt;
+  import CH.obj.entityview.purchase.ISadBuoExt;
+  import CH.obj.entityview.purchase.ISupBuoExt;
+  import CH.obj.entityview.purchase.ISupprdBuoExt;
+  import CH.obj.entityview.sales.ICrdBuoExt;
+  import CH.obj.entityview.sales.ICusBuoExt;
+  import CH.obj.entityview.sales.ICusprdBuoExt;
+  import CH.obj.entityview.sales.IDadBuoExt;
+  import CH.obj.repository.def.biz.IBusinessTypeDef;
+  import CH.obj.repository.def.biz.datatypes.ILinetype;
+  import String;
+  import boolean;
+  import java.util.Set;
+?>
+"use of entity extension":
+  $view.getGeneralDefaulter($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getGeneralDefaulter($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getDateDefaulter($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getDateDefaulter($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getObjtext($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getObjtext($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getObjtranslation($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getObjtranslation($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsdcndList($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsdcndList($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsdresList($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsdresList($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setQsdresListObsolete($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setQsdresListObsolete($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getReservationType($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getReservationType($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getProtectedReservationMode($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getProtectedReservationMode($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsdaccList($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsdaccList($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDC($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDC($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDCSales($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDCSales($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDCPurchase($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDCPurchase($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDCPpc($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDCPpc($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDCServiceSales($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDCServiceSales($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDCServicePurchase($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDCServicePurchase($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDCProject($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDCProject($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isTrading($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isTrading($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isImport($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isImport($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isContract($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isContract($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDCCRM($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDCCRM($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDCCRMJob($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDCCRMJob($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDCCRMProject($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDCCRMProject($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDCCRMContract($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDCCRMContract($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isServiceContractAgreementElement($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isServiceContractAgreementElement($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDCCRMCase($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDCCRMCase($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUDCReturn($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUDCReturn($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isConsignment($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isConsignment($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getUniqueRef($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getUniqueRef($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setItemNumber($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setItemNumber($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setItemSubNumber($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setItemSubNumber($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isSpecial($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isSpecial($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isSaveWithBehaviour($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isSaveWithBehaviour($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isSaveWithPluglets($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isSaveWithPluglets($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isSaveFastWithApplications($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isSaveFastWithApplications($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isItemNumberSafe($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isItemNumberSafe($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQltEvaluationSign($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQltEvaluationSign($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQstqspBehaviour($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQstqspBehaviour($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getBehaviour($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getBehaviour($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setBundleId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setBundleId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getDateExpire($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getDateExpire($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getBackboneBookingField($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getBackboneBookingField($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getBackboneBookingFieldPuom($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getBackboneBookingFieldPuom($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getBackboneBookingFieldCuom($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getBackboneBookingFieldCuom($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getMilestoneAmount($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getMilestoneAmount($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isAddItemAllowed($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isAddItemAllowed($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isCheckWhslocFromRequired($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isCheckWhslocFromRequired($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isCheckWhslocToRequired($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isCheckWhslocToRequired($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isGeneratedByHeadpricefinding($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isGeneratedByHeadpricefinding($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsbExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsbExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsbgrpExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbQsbgrpView(IQsbgrpBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getWrappedQsbExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getWrappedQsbExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isLocked($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isLocked($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.lock($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).lock($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.requestLock($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).requestLock($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.unlock($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).unlock($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setLockedObjectId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setLockedObjectId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPartialDonebox($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPartialDonebox($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setQltIdSynch($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setQltIdSynch($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.synchronizeQltIds($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).synchronizeQltIds($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQuattroCumulationExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQuattroCumulationExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQdfExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQdfExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isSimulation($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isSimulation($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isPrduomChangeAllowed($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isPrduomChangeAllowed($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isPriceLocked($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isPriceLocked($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.hasFixprice($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).hasFixprice($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.initialisizeQsbAmountFields($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).initialisizeQsbAmountFields($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setItemLevel($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setItemLevel($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setQuantities($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setQuantities($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isNaturalDiscount($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isNaturalDiscount($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isDischargeamountQltId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isDischargeamountQltId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isProtectedReservationActivated($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isProtectedReservationActivated($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.updatePartslistParent($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).updatePartslistParent($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getExtensionFields() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.link(IQsiExtensionFields.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getAdr46AdrExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getAdr46AdrExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getAdr48tourExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getAdr48tourExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getStyExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbStyView(IStyBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getAdr45AdrExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getAdr45AdrExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getCrgtypExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbCrgtypView(ICrgtypBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getCusExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbCusView(ICusBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getBdlExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbBdlView(IBdlBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getCrdExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbCrdView(ICrdBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getCusOwnerExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbCusOwnerView(ICusBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getCusprdExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getCusprdExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getCurCurrencyExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbCurCurrencyView(ICurBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getCusprdBookingExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getCusprdBookingExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getDadDeliveryExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbDadDeliveryView(IDadBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getDadViaExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbDadViaView(IDadBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsiDyngroupExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsiDyngroupView(IQsiBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getDadOrderExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbDadOrderView(IDadBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getDadInvoiceExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbDadInvoiceView(IDadBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getDspExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbDspView(IDspBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getHeadPositionExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getHeadPositionExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getDlyExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbDlyView(IDlyBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPayExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbPayView(IPayBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getCstuniExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbCstuniView(ICstuniBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPcaExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPcaExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPltExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbPltView(IPltBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPltToExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbPltToView(IPltBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrdExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPrdExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrduomExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPrduomExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrduom03Ext() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPrduom03Ext() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrduomBookingExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPrduomBookingExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrdsalExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPrdsalExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrdpurExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPrdpurExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrdppcExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPrdppcExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrdvarExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbPrdvarView(IPrdvarBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPgruomExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbPgruomView(IPgruomBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPgrExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPgrExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getUniExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbUniView(IUniBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQrmExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbQrmView(IQrmBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsbPlugobserve1Ext() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbQsbPlugobserve1View(IQsbBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQshExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQshExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsiSummaryExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsiSummaryView(IQsiBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsiParentExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsiParentView(IQsiBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsiContractExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsiContractExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsiParentExtReloaded($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsiParentExtReloaded($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsiBelongsToExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsiBelongstoExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsiTopparentExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsiTopparentExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsiStructureExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsiStructureView(IQsiBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQltExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQltExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getLinetype($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getLinetype($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getBusinessType($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getBusinessType($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQltgrpExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQltgrpView(IQltgrpBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQspstsExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQspstsView(IQspstsBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQstqspRuleExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbQstqspRuleView(IQstqspBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQstqspExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQstqspExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQstqsptypExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbQstqsptypView(IQstqsptypBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQspExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQspExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsdallExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsdallExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getRngExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbRngView(IRngBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getRspdstExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbRspdstView(IRspdstBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsbtimExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsbtimExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getSadDeliveryExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbSadDeliveryView(ISadBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getSadOfferExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbSadOfferView(ISadBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getSadOrderExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbSadOrderView(ISadBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getSadPickupExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbSadPickupView(ISadBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getSupExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbSupView(ISupBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getBusinessPartner($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getBusinessPartner($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getSupprdExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getSupprdExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getSupprdBookingExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getSupprdBookingExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getTaxPerspectiveExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbTaxPerspectiveView(ITaxBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getTaxSenderExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbTaxSenderView(ITaxBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getTaxReceiverExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbTaxReceiverView(ITaxBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getTouExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbTouView(ITouBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getRouExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getRouExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getVatExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbVatView(IVatBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getWhsFromExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbWhsFromView(IWhsBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getWhsToExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbWhsToView(IWhsBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getWhslocFromExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbWhslocFromView(IWhslocBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getWhslocToExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbWhslocToView(IWhslocBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsxExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsxExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getBcaExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbBcaView(IBcaBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getBusinessChannel($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getBusinessChannel($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getProcessModeSet($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getProcessModeSet($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getLotFromExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbLotFromView(ILotBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getLotToExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbLotToView(ILotBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsdfstExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbQsdfstView(IQsdfstBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getUomQuantityposExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbUomQuantityposView(IUomBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getUomQuantitypospuomExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbUomQuantitypospuomView(IUomBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getUomQuantityposcuomExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbUomQuantityposcuomView(IUomBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrdstsFromExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbPrdstsFromView(IPrdstsBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrdstsToExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbPrdstsToView(IPrdstsBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsiclcExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsiclcExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.initializeQsiclcExt($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).initializeQsiclcExt($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.clearQsiclcExt($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).clearQsiclcExt($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getDadInvoiceMainAdrId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getDadInvoiceMainAdrId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getDadOrderMainAdrId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getDadOrderMainAdrId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.hasSuccessor($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).hasSuccessor($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.hasSuccessorConstruct($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).hasSuccessorConstruct($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.hasForerunner($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).hasForerunner($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.hasForerunnerConstruct($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).hasForerunnerConstruct($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.needsUnit($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).needsUnit($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.needsSSCC($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).needsSSCC($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.needsLot($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).needsLot($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.needsVariant($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).needsVariant($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isLotOpeningManual($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isLotOpeningManual($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isUnitOpeningManual($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isUnitOpeningManual($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.initializeQsi($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).initializeQsi($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.initializeFromQsh($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).initializeFromQsh($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.initializeFromCache($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).initializeFromCache($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.initializeFromQsiParent($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).initializeFromQsiParent($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.initializeFromQsiBelongsto($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).initializeFromQsiBelongsto($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getLotIdByFlagorigin($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getLotIdByFlagorigin($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrdstsIdByFlagorigin($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPrdstsIdByFlagorigin($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrdsupExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPrdsupExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPaytypExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getQsbPaytypView(IPaytypBuoExt.class) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getPrdsupBookingExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getPrdsupBookingExt() :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsbQty0603List($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsbQty0603List($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsbQtyssccmaxList($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsbQtyssccmaxList($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsbQuantityquattroList($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsbQuantityquattroList($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsbQty0101List($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsbQty0101List($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsbQty4602List($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsbQty4602List($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsbQty4601List($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsbQty4601List($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.logQuantities($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).logQuantities($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setFlagExplodePartslist($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setFlagExplodePartslist($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getFlagExplodePartslist($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getFlagExplodePartslist($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.save($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).save($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.save($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).save($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.saveWithMerge($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).saveWithMerge($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.saveWithMerge($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).saveWithMerge($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.save($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).save($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.save($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).save($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.delete($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).delete($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setAppsMode($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setAppsMode($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getAppsMode($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getAppsMode($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.successor($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).successor($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isProcessingMode($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isProcessingMode($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isReorganisation($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isReorganisation($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.markProcessing($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).markProcessing($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.removeProcessing($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).removeProcessing($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.clearProcessing($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).clearProcessing($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isProcessingAfterInsert($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isProcessingAfterInsert($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setProcessingAfterInsert($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setProcessingAfterInsert($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.toWrapperQshQsi($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).toWrapperQshQsi($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.hasDependentItems($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).hasDependentItems($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.checkVersion($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).checkVersion($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getStepValue($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getStepValue($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getCache($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getCache($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getAccountingObserver($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getAccountingObserver($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isPossibleQtyCalculatedManually($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isPossibleQtyCalculatedManually($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setPossibleQtyCalculatedManually($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setPossibleQtyCalculatedManually($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setQsiSourceId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setQsiSourceId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getQsiSourceId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getQsiSourceId($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.setMultiQuantityDefaulting($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).setMultiQuantityDefaulting($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.isMultiQuantityDefaulting($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).isMultiQuantityDefaulting($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;
+"use of entity extension":
+  $view.getReferenceForUni($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+=>
+  $view.getExtension(QuattroItemExtension.class).getReferenceForUni($args$) :: $view instanceof CH.obj.entityview.its.IQsiBuoExt
+;;

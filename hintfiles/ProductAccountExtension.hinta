@@ -1,0 +1,440 @@
+<?
+  import CH.obj.Application.Material.Account.stockMover.ProductAccountExtension;
+  import CH.obj.Libraries.Datatypes.DddFlagPrdstkuni;
+  import CH.obj.Libraries.Datatypes.DddFlagbundle;
+  import CH.obj.Libraries.Datatypes.DddPrdvallvlValuationType;
+  import CH.obj.Libraries.Datatypes.DddStsPrdsviBundle;
+  import CH.obj.Libraries.Datatypes.ObjectId;
+  import CH.obj.Libraries.Datatypes.PRDSTSUSAGE;
+  import CH.obj.Libraries.Datatypes.ValQuantity;
+  import CH.obj.entityview.code.IAcpBuoExt;
+  import CH.obj.entityview.code.IAcpBuoRo;
+  import CH.obj.entityview.code.IAcplckBuoExt;
+  import CH.obj.entityview.its.IQsdaccBuoExt;
+  import CH.obj.entityview.its.IQsiBuoExt;
+  import CH.obj.entityview.material.ILotBuoExt;
+  import CH.obj.entityview.material.IMovBuoExt;
+  import CH.obj.entityview.material.IPltBuoExt;
+  import CH.obj.entityview.material.IPrdaccBuoExt;
+  import CH.obj.entityview.material.IPrdaccExtensionFields;
+  import CH.obj.entityview.material.IPrdstkBuoExt;
+  import CH.obj.entityview.material.IPrdstksplBuoExt;
+  import CH.obj.entityview.material.IPrdstkuniBuoExt;
+  import CH.obj.entityview.material.IPrdstsBuoExt;
+  import CH.obj.entityview.material.IPrdsupBuoExt;
+  import CH.obj.entityview.material.IPrdsviBuoExt;
+  import CH.obj.entityview.material.IPrduomBuoExt;
+  import CH.obj.entityview.material.IPrduomdynBuoExt;
+  import CH.obj.entityview.material.IPrdvarBuoExt;
+  import CH.obj.entityview.material.IPrdwhsBuoExt;
+  import CH.obj.entityview.material.IPrdwhsassBuoExt;
+  import CH.obj.entityview.material.IUniBuoExt;
+  import CH.obj.entityview.material.IUomBuoExt;
+  import CH.obj.entityview.material.IWhsBuoExt;
+  import CH.obj.entityview.material.IWhslocBuoExt;
+  import CH.obj.entityview.purchase.ISupBuoExt;
+  import CH.obj.entityview.sales.ICusBuoExt;
+  import boolean;
+  import java.util.List;
+  import java.util.Set;
+?>
+
+"use of entity extension":
+  $view.getMovExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getMovExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getMovSecondaryStr($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getMovSecondaryStr($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrduomFromExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrduomFromExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrduomFromInitialExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrduomFromInitialExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrduomToInitialExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrduomToInitialExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrduomFromOrToExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrduomFromOrToExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrduomdynExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrduomdynExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getWhsFromOrToExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getWhsFromOrToExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+
+"use of entity extension":
+  $view.getUniFromExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getUniFromExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getLotFromOrToExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getLotFromOrToExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrdstkuniFromExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrdstkuniFromExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getAcpRoExt($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getAcpRoExt($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getAcplckExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getAcplckExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPuomId($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPuomId($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPuomExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPuomExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getSuomId($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getSuomId($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getSuomExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getSuomExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrdsupFromExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrdsupFromExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrdwhsExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrdwhsExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getValuationType($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getValuationType($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isProductStockSplit($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isProductStockSplit($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUpdateProductStockBalance($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUpdateProductStockBalance($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isProductStockUnit($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isProductStockUnit($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isProductSupervision($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isProductSupervision($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isProductAccount($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isProductAccount($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isQuattroAccount($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isQuattroAccount($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUpdateProductHistory($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUpdateProductHistory($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUpdateProductExtendMaterial($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUpdateProductExtendMaterial($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUpdateProductExtendPurchase($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUpdateProductExtendPurchase($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUpdateProductExtendPpc($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUpdateProductExtendPpc($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUpdateProductInventoryStock($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUpdateProductInventoryStock($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUpdateProductReservation($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUpdateProductReservation($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUpdateProductSupplyMgmt($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUpdateProductSupplyMgmt($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUpdateProductWarehouseAssignment($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUpdateProductWarehouseAssignment($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUpdateSupplierProduct($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUpdateSupplierProduct($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUpdateUni($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUpdateUni($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isLockNeeded($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isLockNeeded($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isPriceCalculation($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isPriceCalculation($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isDateexpirationMandatory($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isDateexpirationMandatory($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isSynchronizingProductStock($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isSynchronizingProductStock($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isLot($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isLot($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isLotAccount($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isLotAccount($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isWhslocFromRequired($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isWhslocFromRequired($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isLotFromRequired($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isLotFromRequired($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isPrdvarFromRequired($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isPrdvarFromRequired($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isPrdstsFromRequired($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isPrdstsFromRequired($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isCancel($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isCancel($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isSplitMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isSplitMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUnitMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUnitMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isUnitMovementWithoutWhsMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isUnitMovementWithoutWhsMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isWhsOrLocMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isWhsOrLocMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isLotMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isLotMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isPackUni($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isPackUni($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isQuattroBooking($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isQuattroBooking($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.isProcessingSecondaryMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).isProcessingSecondaryMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.markProcessingSecondaryMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).markProcessingSecondaryMovement($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getCusfinExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getCusfinExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getSupfinExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getSupfinExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getUniIdSet($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getUniIdSet($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getQsiExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getQsiExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+
+"use of entity extension":
+  $view.getDivisionOrgId($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getDivisionOrgId($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.initializeFromQsiExt($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).initializeFromQsiExt($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.reverseValuesAndQuantities($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).reverseValuesAndQuantities($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getFlagPrdstkuniFrom($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getFlagPrdstkuniFrom($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getFlagPrdstkuniTo($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getFlagPrdstkuniTo($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getUsageForPrdstsFrom($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getUsageForPrdstsFrom($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getUsageForPrdstsTo($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getUsageForPrdstsTo($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrdsviPropertyForBundle($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrdsviPropertyForBundle($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+
+"use of entity extension":
+  $view.getPrdstkExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrdstkExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrdstkToExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrdstkToExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrdstksplExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrdstksplExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrdstkuniExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrdstkuniExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getInitializedPrdstkvalaccs($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getInitializedPrdstkvalaccs($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+
+"use of entity extension":
+  $view.getFlagbundleFromQsiOrPrdacc($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getFlagbundleFromQsiOrPrdacc($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getPrdwhsassExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getPrdwhsassExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.setQuantitypuomBefore($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).setQuantitypuomBefore($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getQuantitypuomBefore($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getQuantitypuomBefore($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.getQsdaccPrimaryExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).getQsdaccPrimaryExt() :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;
+"use of entity extension":
+  $view.setQsdaccPrimaryExt($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+=>
+  $view.getExtension(ProductAccountExtension.class).setQsdaccPrimaryExt($args$) :: $view instanceof CH.obj.entityview.material.IPrdaccBuoExt
+;;

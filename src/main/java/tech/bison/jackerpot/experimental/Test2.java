@@ -1,5 +1,5 @@
 
-package tech.bison.jackerpot;
+package tech.bison.jackerpot.experimental;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,12 +34,12 @@ import tech.bison.jackerpot.hintparser.HintParser;
 import tech.bison.jackerpot.hintparser.HintParserFactory;
 import tech.bison.jackerpot.source.Replacement;
 
-public class Jackerpot {
+public class Test2 {
   private static final List<String> ROOT_FOLDER_PREFIX = Arrays.asList("CH.fenaco", "CH.obj.Application", "Modultests");
   private static final String HINT_FILE = "file:/C:/workspace/landi_frame_head/tech.bison.jackerpot/hintfiles/QuattroItemExtension.adjusted.hint";
   private static final String HINT_FILE_FOLDER = "C:\\workspace\\landi_frame_head\\tech.bison.jackerpot\\hintfiles";
   private static final String APPLICATION_ROOT = "C:\\workspace\\landi_frame_head\\Application";
-  private static final Logger LOGGER = Logger.getLogger(Jackerpot.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(Test2.class.getName());
   private static TypeSolver typeSolvers;
   private static List<Replacement> replacements;
 
@@ -58,7 +58,7 @@ public class Jackerpot {
           .filter(result -> result.isSuccessful() && result.getResult().isPresent()) //
           .map(result -> result.getResult().get()) //
           .filter(cu -> !cu.getPrimaryTypeName().get().contains("Condition")) // workaround
-          .forEach(Jackerpot::addVisitor);
+          .forEach(Test2::addVisitor);
 
       LOGGER.info(() -> "exiting " + sourceFolder);
     }
@@ -83,7 +83,7 @@ public class Jackerpot {
 
   private static List<Replacement> createReplacements() {
     List<Replacement> allReplacements = new ArrayList<>();
-    // getHintFiles().stream().map(Jackerpot::parseHintFile).forEach(replacements::addAll);
+    // getHintFiles().stream().map(Test2::parseHintFile).forEach(replacements::addAll);
     for (URI hintfile : getHintFiles()) {
       allReplacements.addAll(parseHintFile(hintfile));
     }
@@ -166,7 +166,7 @@ public class Jackerpot {
     try {
       rootFolders = Files.walk(Paths.get(APPLICATION_ROOT)) //
           .filter(Files::isDirectory) //
-          .filter(Jackerpot::isRootFolder) //
+          .filter(Test2::isRootFolder) //
           .collect(Collectors.toList());
 
       for (Path path : rootFolders) {

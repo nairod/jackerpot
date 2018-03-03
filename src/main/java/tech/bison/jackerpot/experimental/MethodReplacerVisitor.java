@@ -1,5 +1,5 @@
 
-package tech.bison.jackerpot;
+package tech.bison.jackerpot.experimental;
 
 import java.util.List;
 import java.util.Optional;

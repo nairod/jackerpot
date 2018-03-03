@@ -4,28 +4,28 @@
  * Copyright (c) 2018 BISON Schweiz AG, All Rights Reserved.
  */
 
-package tech.bison.jackerpot.source;
+package tech.bison.jackerpot;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import tech.bison.jackerpot.source.Replacement;
+
 /**
- * TD2:dorian.nyffeler Auto-generated comment for class
  *
  * @author dorian.nyffeler
  */
-public class ViewReplacement implements Replacement {
+public class ExtensionReplacement implements Replacement {
 
   private String _oldMethod;
   private String _viewType;
-  private String _newMethod;
-  private String _newMethodTypeParameter;
+  private String _extensionClass;
 
-  public ViewReplacement(String oldMethod, String viewType, String newMethod, String newMethodTypeParameter) {
+  public ExtensionReplacement(String oldMethod, String viewType, String extensionClass) {
     _oldMethod = oldMethod;
     _viewType = viewType;
-    _newMethod = newMethod;
-    _newMethodTypeParameter = newMethodTypeParameter;
+    _extensionClass = extensionClass;
   }
 
   @Override
@@ -40,16 +40,16 @@ public class ViewReplacement implements Replacement {
 
   @Override
   public String getNewMethod() {
-    return _newMethod;
+    return "getExtension(" + _extensionClass + ")." + _oldMethod;
   }
 
   @Override
   public List<String> getNewMethodTypeParameters() {
-    return Arrays.asList(_newMethodTypeParameter);
+    return Collections.emptyList();
   }
 
   @Override
   public List<String> getClassesToImport() {
-    return Arrays.asList("tech.bison.jackerpot.views.IBarView");
+    return Arrays.asList("tech.bison.jackerpot.testdummies.FooExtension");
   }
 }

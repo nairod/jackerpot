@@ -23,5 +23,17 @@
       <version>3.5.11</version>
     </dependency>
     <!-- JavaParser itself is not a dependency here. It gets included indirectly through java-symbol-solver-core -->
+    <dependency>
+      <groupId>me.tongfei</groupId>
+      <artifactId>progressbar</artifactId>
+      <version>0.5.5</version>
+    </dependency>
+    <dependency>
+      <groupId>tech.bison.jackerpot</groupId>
+      <artifactId>hintparser</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/libs/tech.bison.jackerpot.hintparser.jar</systemPath>
+    </dependency>
   </dependencies>
 </project>

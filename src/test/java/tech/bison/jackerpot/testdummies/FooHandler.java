@@ -1,15 +1,14 @@
 
-package tech.bison.jackerpot;
-
-import tech.bison.jackerpot.views.FooView;
-import tech.bison.jackerpot.views.IBarView;
+package tech.bison.jackerpot.testdummies;
 
 public class FooHandler {
 
-  FooView view = new FooView();
-  Bar bar = new Bar();
+  FooView view;
+  Bar bar;
 
   public FooHandler() {
+    bar = new Bar();
+    view = new FooView();
     view.isBar();
   }
 

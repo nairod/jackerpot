@@ -59,7 +59,7 @@ public final class MethodCallReplacer {
       ResolvedType resolvedType = JavaParserFacade.get(solver).getType(scope.get());
       return resolvedType.isReferenceType()
           && resolvedType.asReferenceType().getQualifiedName().equals(replacement.getFullQualifiedViewType());
-    } catch (RuntimeException e) {
+    } catch (Throwable e) { // NOSONAR - it has to be Throwable, otherwise a NoClassDefFounder exception can stop the program
       LOGGER.log(Level.WARNING, String.format("could not resolve type for %s. Skipped replacement", scope.get().toString()));
       LOGGER.log(Level.FINER, String.format("could not resolve type for %s. Skipped replacement", scope.get().toString()), e);
       return false;

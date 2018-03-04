@@ -24,16 +24,56 @@
     </dependency>
     <!-- JavaParser itself is not a dependency here. It gets included indirectly through java-symbol-solver-core -->
     <dependency>
-      <groupId>me.tongfei</groupId>
-      <artifactId>progressbar</artifactId>
-      <version>0.5.5</version>
-    </dependency>
-    <dependency>
+      <!-- command to add local: mvn install:install-file -Dfile=C:\workspace\landi_frame_head\tech.bison.jackerpot\libs\tech.bison.jackerpot.hintparser.jar 
+        -DgroupId=tech.on.jackerpot -DartifactId=hintparser -Dversion=1 -Dpackaging=jar -->
       <groupId>tech.bison.jackerpot</groupId>
       <artifactId>hintparser</artifactId>
-      <version>1.0</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/libs/tech.bison.jackerpot.hintparser.jar</systemPath>
+      <version>1</version>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+<!--       <plugin> -->
+<!--         <groupId>org.apache.maven.plugins</groupId> -->
+<!--         <artifactId>maven-assembly-plugin</artifactId> -->
+<!--         <executions> -->
+<!--           <execution> -->
+<!--             <phase>package</phase> -->
+<!--             <goals> -->
+<!--               <goal>single</goal> -->
+<!--             </goals> -->
+<!--             <configuration> -->
+<!--               <archive> -->
+<!--                 <manifest> -->
+<!--                   <mainClass> -->
+<!--                     tech.bison.jackerpot.SourceWalker -->
+<!--                   </mainClass> -->
+<!--                 </manifest> -->
+<!--               </archive> -->
+<!--               <descriptorRefs> -->
+<!--                 <descriptorRef>jar-with-dependencies</descriptorRef> -->
+<!--               </descriptorRefs> -->
+<!--             </configuration> -->
+<!--           </execution> -->
+<!--         </executions> -->
+<!--       </plugin> -->
+      <plugin>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-maven-plugin</artifactId>
+      <executions>
+      <execution>
+      <goals>
+      <goal>repackage</goal>
+      </goals>
+      <configuration>
+      <classifier>spring-boot</classifier>
+      <mainClass>
+      tech.bison.jackerpot.SourceWalker
+      </mainClass>
+      </configuration>
+      </execution>
+      </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

@@ -22,7 +22,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/tech.bison.jackerpot.hintparser.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CH.fenaco"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CH.obj.Application"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CH.obj.Application.api"/>
@@ -30,7 +29,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/CH.obj.Application.UnitTesting"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/junit"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Modultests"/>
-	<classpathentry kind="lib" path="C:/workspace/landi_frame_head/.metadata/.ivy-cache/repository/Bison Schweiz AG/CH.obj.Application-generated/artifacts/CH.obj.ApplicationView.jar"/>
-	<classpathentry kind="lib" path="C:/workspace/landi_frame_head/.metadata/.ivy-cache/repository/Bison Schweiz AG/CH.obj.Application-generated/artifacts/CH.obj.ApplicationViewApi.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

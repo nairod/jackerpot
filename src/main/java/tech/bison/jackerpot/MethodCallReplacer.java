@@ -30,6 +30,7 @@ public final class MethodCallReplacer {
 
   public MethodCallReplacer(TypeSolver solver) {
     this.solver = solver;
+    LOGGER.setLevel(Level.INFO);
   }
 
   public void applyReplacement(CompilationUnit cu, Replacement replacement, MethodCallExpr methodCall) {
@@ -58,7 +59,7 @@ public final class MethodCallReplacer {
       ResolvedType resolvedType = JavaParserFacade.get(solver).getType(scope.get());
       return resolvedType.isReferenceType()
           && resolvedType.asReferenceType().getQualifiedName().equals(replacement.getFullQualifiedViewType());
-    } catch (Throwable e) {
+    } catch (RuntimeException e) {
       LOGGER.log(Level.WARNING, String.format("could not resolve type for %s. Skipped replacement", scope.get().toString()));
       LOGGER.log(Level.FINER, String.format("could not resolve type for %s. Skipped replacement", scope.get().toString()), e);
       return false;

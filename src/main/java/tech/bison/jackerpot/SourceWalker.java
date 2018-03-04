@@ -29,31 +29,36 @@ import tech.bison.jackerpot.hintparser.HintParserFactory;
 import tech.bison.jackerpot.source.Replacement;
 
 public class SourceWalker {
+  private static final Logger LOGGER = Logger.getLogger(SourceWalker.class.getName());
   private static final String APPLICATION_ROOT = "C:\\workspace\\landi_frame_head\\Application";
   private static final String HINT_FILE_FOLDER = "C:\\workspace\\landi_frame_head\\tech.bison.jackerpot\\hintfiles";
   private static final List<String> ROOT_FOLDER_PREFIX = Arrays.asList("CH.fenaco", "CH.obj.Application", "xModultests");
-  private static final Logger LOGGER = Logger.getLogger(SourceWalker.class.getName());
   private static List<Replacement> replacements;
   private static CombinedTypeSolver combinedTypeSolver;
   private static MethodCallReplacer methodReplacer;
 
   public static void main(String[] args) {
     LOGGER.setLevel(Level.INFO);
+
+    List<Path> sourceFolders = getSourceFolders();
+    sourceFolders.forEach(f -> LOGGER.info("added folder " + f.toString()));
+
     createParserConfiguration(combinedTypeSolver);
     combinedTypeSolver = createTypeSolvers();
     methodReplacer = new MethodCallReplacer(combinedTypeSolver);
     replacements = createReplacements();
 
-    List<Path> sourceFolders = getSourceFolders();
     LOGGER.info(sourceFolders::toString);
     sourceFolders.parallelStream().forEach(path -> {
       LOGGER.info(() -> "entering path " + path.toString());
-      getJavaFiles(path).parallelStream() //
+      List<Path> javaFiles = getJavaFiles(path);
+      javaFiles.parallelStream() //
           .map(SourceWalker::parseFile) //
           .filter(Optional<CompilationUnit>::isPresent) //
           .map(Optional<CompilationUnit>::get) //
           .forEach(SourceWalker::applyReplacements);
     });
+    LOGGER.info("---The End. Now let's try to compile. ---");
   }
 
   private static Optional<CompilationUnit> parseFile(Path javaFile) {

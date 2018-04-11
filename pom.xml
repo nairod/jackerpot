@@ -25,7 +25,7 @@
     <!-- JavaParser itself is not a dependency here. It gets included indirectly through java-symbol-solver-core -->
     <dependency>
       <!-- command to add local: mvn install:install-file -Dfile=C:\workspace\landi_frame_head\tech.bison.jackerpot\libs\tech.bison.jackerpot.hintparser.jar 
-        -DgroupId=tech.on.jackerpot -DartifactId=hintparser -Dversion=1 -Dpackaging=jar -->
+        -DgroupId=tech.bison.jackerpot -DartifactId=hintparser -Dversion=1 -Dpackaging=jar -->
       <groupId>tech.bison.jackerpot</groupId>
       <artifactId>hintparser</artifactId>
       <version>1</version>
